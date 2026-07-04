@@ -1,0 +1,4 @@
+{
+    "Normal": "https://api.aladhan.com/v1/timingsByAddress?address=Cairo&method=5",
+    "Coptic": "https://api.coptic.io/api/calendar"
+}
