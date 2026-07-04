@@ -12,14 +12,15 @@ class Calendar {
   String? year;
   String? dayString;
   String? monthString;
+  Map<String, dynamic>? timings;
   String type;
   String url;
 
   Widget dateWidget() => Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(day ?? '--', style: TextStyle(fontSize: 80, fontWeight: FontWeight.bold)),
-        Text(monthString ?? month ?? '--', style: TextStyle(fontSize: 20)),
+        Text(day ?? '--', style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
+        Text(monthString ?? month ?? '--', style: TextStyle(fontSize: 30)),
         Text(year ?? '--', style: TextStyle(fontSize: 30)),
       ],
     );
@@ -33,24 +34,25 @@ class Calendar {
           case 'Gregorian':
             day = jsonData['data']['date']['gregorian']['day'];
             month = jsonData['data']['date']['gregorian']['month']['number'].toString();
-            year = jsonData['data']['date']['gregorian']['year'];
+            year = jsonData['data']['date']['gregorian']['year']+ ' م';
             dayString = jsonData['data']['date']['gregorian']['weekday']['en'];
             monthString = jsonData['data']['date']['gregorian']['month']['en'];
-            monthString = lang![monthString] ?? monthString;
+            monthString = lang?[monthString] ?? monthString;
             break;
           case 'Hijri':
             day = jsonData['data']['date']['hijri']['day'];
             month = jsonData['data']['date']['hijri']['month']['number'].toString();
-            year = jsonData['data']['date']['hijri']['year'];
+            year = jsonData['data']['date']['hijri']['year'] + ' هـ';
             dayString = jsonData['data']['date']['hijri']['weekday']['ar'];
             monthString = jsonData['data']['date']['hijri']['month']['ar'];
+            timings = jsonData['data']['timings'];
             break;
           case 'Coptic':
             day = jsonData['day'].toString();
             month = jsonData['month'].toString();
-            year = jsonData['year'].toString();
+            year = '${jsonData['year']} ق';
             monthString = jsonData['monthString'];
-            monthString = lang![monthString] ?? monthString;
+            monthString = lang?[monthString] ?? monthString;
             break;
           default:
             debugPrint('Unknown calendar type: $type');
