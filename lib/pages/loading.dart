@@ -12,21 +12,28 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
 
-  void setCalenders() async {
-    await Future.delayed(Duration(seconds: 3));
+  Future<void> setCalenders() async {
     try {
-    
-    String urlsString = await rootBundle.loadString('lib/data/urls.json');
-    final dynamic urls = jsonDecode(urlsString);
-    if (urls is Map) {
-      
+    String langString = await rootBundle.loadString('lib/data/lang-ar.json');
+    final dynamic lang = jsonDecode(langString);
+    if (lang is Map<String,dynamic>) {
+      Calendar.setLang(lang);
     } else {
       debugPrint('Unexpected JSON format.');
     }
-    String langString = await rootBundle.loadString('lib/data/lang-ar.json');
-    final dynamic lang = jsonDecode(langString);
-    if (lang is Map<String,String>) {
-      Calendar.setLang(lang);
+
+    String urlsString = await rootBundle.loadString('lib/data/urls.json');
+    final dynamic urls = jsonDecode(urlsString);
+    if (urls is Map) {
+      calendars.clear();
+
+      final futures = urls.entries.map((entry) {
+        final curCal = Calendar(type: entry.key, url: entry.value);
+        calendars[entry.key] = curCal;
+        return curCal.fetch();
+      });
+      await Future.wait(futures);
+
     } else {
       debugPrint('Unexpected JSON format.');
     }
@@ -37,7 +44,8 @@ class _LoadingState extends State<Loading> {
   } catch (e) {
     debugPrint('Unexpected error: $e');
   }
-    Navigator.pushReplacementNamed(context, '/home');
+  if (!mounted) return; 
+  Navigator.pushReplacementNamed(context, '/home');
   }
   @override
   void initState() {

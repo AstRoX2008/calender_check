@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:calender_check/services/calendar_service.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,14 +14,22 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-          child: Text('صلي على النبي',style: TextStyle(fontSize: 30)),
-        ),
-        backgroundColor: Colors.greenAccent
+          child: Text('صلي على النبي',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold)),
+        )
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [],
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                calendars['Gregorian']?.dateWidget() ?? Text('Loading...'),
+                calendars['Hijri']?.dateWidget() ?? Text('Loading...'),
+              ],
+            ),
+            calendars['Coptic']?.dateWidget() ?? Text('Loading...'),
+          ],
         ),
       ),
     );
