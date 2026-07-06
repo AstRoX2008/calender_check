@@ -36,6 +36,14 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.6.0
   intl: ^0.20.3
+  hijri: ^3.0.1
+  flutter_launcher_icons: ^0.14.4
+  to_arabic_number: ^1.0.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"
   
 dev_dependencies:
   flutter_test:
@@ -63,6 +71,7 @@ flutter:
   assets:
     - lib/data/urls.json
     - lib/data/lang-ar.json
+    - assets/icon.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

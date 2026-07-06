@@ -26,7 +26,6 @@ class _LoadingState extends State<Loading> {
     final dynamic urls = jsonDecode(urlsString);
     if (urls is Map) {
       calendars.clear();
-
       final futures = urls.entries.map((entry) {
         final curCal = Calendar(type: entry.key, url: entry.value);
         calendars[entry.key] = curCal;

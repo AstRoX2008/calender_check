@@ -1,5 +1,5 @@
 {
-    "Gregorian": "https://api.aladhan.com/v1/timingsByAddress?address=Cairo&method=5",
-    "Hijri": "https://api.aladhan.com/v1/timingsByAddress?address=Cairo&method=5",
-    "Coptic": "https://api.coptic.io/api/calendar"
+    "Gregorian": "",
+    "Hijri": "https://api.aladhan.com/v1/timingsByAddress/",
+    "Coptic": "https://api.coptic.io/api/calendar/"
 }
