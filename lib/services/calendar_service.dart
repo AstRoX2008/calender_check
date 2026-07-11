@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:calender_check/pages/home.dart';
 
 Map<String,dynamic>? lang;
 Map<String, Calendar> calendars = {};
@@ -23,9 +24,9 @@ class Calendar {
   Widget dateWidget(BuildContext context) => Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(day ?? '--', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.1, fontWeight: FontWeight.bold)),
-        Text(monthString ?? month ?? '--', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05)),
-        Text(year ?? '--', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05)),
+        Text(day ?? '--', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.1, fontWeight: FontWeight.bold,color: textColor)),
+        Text(monthString ?? month ?? '--', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05,color: textColor)),
+        Text(year ?? '--', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05,color: textColor)),
       ],
     );
   

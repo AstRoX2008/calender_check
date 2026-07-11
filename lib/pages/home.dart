@@ -8,6 +8,7 @@ class Home extends StatefulWidget {
   @override
   State<Home> createState() => _HomeState();
 }
+  Color textColor = const Color.fromARGB(255, 255, 255, 255);
 class _HomeState extends State<Home> {
   bool clickable = true;
   void changeDate(String arrow) async {
@@ -28,14 +29,22 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 11, 14, 31),
       appBar: AppBar(
         title:  Center(
-          child: Text('صلي على النبي',style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.08,fontWeight: FontWeight.bold)),
-        )
+          child: Text('صلي على النبي',style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.08,fontWeight: FontWeight.bold,color: textColor)),
+        ),
+        backgroundColor: const Color.fromARGB(255, 29, 113, 151),
       ),
-      body:SafeArea(
-        bottom: true,
-        child: Scrollbar(
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/background.png'),
+              fit: BoxFit.cover,
+            )
+          ),
+          child: Scrollbar(
           controller: _scrollController,
           child: SingleChildScrollView(
             controller: _scrollController,
@@ -45,24 +54,24 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: MediaQuery.of(context).size.width * 0.05),
-            Text(calendars['Hijri']?.dayString ?? 'Loading...', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.1, fontWeight: FontWeight.bold)),
-            Text(calendars['Gregorian']?.dayString ?? 'Loading...', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05)),
+            Text(calendars['Hijri']?.dayString ?? 'Loading...', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.1, fontWeight: FontWeight.bold,color: textColor)),
+            Text(calendars['Gregorian']?.dayString ?? 'Loading...', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05,color: textColor)),
             SizedBox(height: MediaQuery.of(context).size.width * 0.06),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                calendars['Gregorian']?.dateWidget(context) ?? Text('Loading...'),
-                calendars['Hijri']?.dateWidget(context) ?? Text('Loading...'),
+                calendars['Gregorian']?.dateWidget(context) ?? Text('Loading...',style: TextStyle(color: textColor)),
+                calendars['Hijri']?.dateWidget(context) ?? Text('Loading...',style: TextStyle(color: textColor)),
               ],
             ),
-            calendars['Coptic']?.dateWidget(context) ?? Text('Loading...'),
+            calendars['Coptic']?.dateWidget(context) ?? Text('Loading...',style: TextStyle(color: textColor)),
             SizedBox(height: 30),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: calendars['Hijri']?.timings?.entries.map((entry) {
                 return Text('${lang?[entry.key] ?? entry.key} :  ${DateFormat('h:mm a').format(DateFormat('HH:mm').parse(entry.value)).replaceAll('AM', 'ص')
-                .replaceAll('PM', 'م')}', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.08));
-              }).toList() ?? [Text('Loading...')],
+                .replaceAll('PM', 'م')}', style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.08,color: textColor));
+              }).toList() ?? [Text('Loading...',style: TextStyle(color: textColor))],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -73,8 +82,9 @@ class _HomeState extends State<Home> {
             )
           ]
         ),
-          )
+      )
       ),
+    )
 
       ) 
     );
