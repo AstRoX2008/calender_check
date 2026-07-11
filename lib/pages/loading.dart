@@ -24,11 +24,11 @@ class _LoadingState extends State<Loading> {
 
     String urlsString = await rootBundle.loadString('lib/data/urls.json');
     final dynamic urls = jsonDecode(urlsString);
-    if (urls is Map) {
+    if (urls is List) {
       calendars.clear();
-      final futures = urls.entries.map((entry) {
-        final curCal = Calendar(type: entry.key, url: entry.value);
-        calendars[entry.key] = curCal;
+      final futures = urls.map((url) {
+        final curCal = Calendar(type: url);
+        calendars[url] = curCal;
         return curCal.fetch();
       });
       await Future.wait(futures);

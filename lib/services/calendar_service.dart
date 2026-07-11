@@ -16,7 +16,9 @@ class Calendar {
   String? monthString;
   Map<String, dynamic>? timings;
   String type;
-  String url;
+  List<dynamic> days = [];
+  dynamic curDayData;
+  int deepSeatedMonth = -1;
 
   Widget dateWidget(BuildContext context) => Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -39,28 +41,43 @@ class Calendar {
             monthString = lang?[monthString] ?? monthString;
             break;
           case 'Hijri':
-            final response = await http.get(Uri.parse('$url${DateFormat('dd-MM-yyyy').format(curDate)}?address=Cairo&method=5'));
-            if (response.statusCode == 200) {
-              final jsonData = jsonDecode(response.body);
-              day = jsonData['data']['date']['hijri']['day'];
-              month = jsonData['data']['date']['hijri']['month']['number'].toString();
-              year = jsonData['data']['date']['hijri']['year'] + ' هـ';
-              dayString = jsonData['data']['date']['hijri']['weekday']['ar'];
-              monthString = jsonData['data']['date']['hijri']['month']['ar'];
-              timings = jsonData['data']['timings'];
-              timings?.removeWhere((key, value) => key == 'Sunset' || key == 'Imsak' || key == 'Midnight' || key == 'Firstthird' || key == 'Lastthird');
+          // https://api.aladhan.com/v1/calendarByCity/2026/7?city=Cairo&country=Egypt&method=5
+          // https://api.aladhan.com/v1/timingsByAddress/${DateFormat('dd-MM-yyyy').format(curDate)}?address=Cairo&method=5
+            if(deepSeatedMonth != curDate.month){
+              final response = await http.get(Uri.parse('https://api.aladhan.com/v1/calendarByCity/${curDate.year}/${curDate.month}?city=Cairo&country=Egypt&method=5'));
+              if (response.statusCode == 200) {
+                final jsonData = jsonDecode(response.body);
+                days = jsonData['data'];
+                //debugPrint(jsonData);
+              }
             }
+            
+            curDayData = days[int.parse(calendars["Gregorian"]!.day ?? '1') - 1];
+            day = curDayData['date']['hijri']['day'];
+            month = curDayData['date']['hijri']['month']['number'].toString();
+            year = curDayData['date']['hijri']['year'] + ' هـ';
+            dayString = curDayData['date']['hijri']['weekday']['ar'];
+            monthString = curDayData['date']['hijri']['month']['ar'];
+            timings = curDayData['timings'];
+            timings?.removeWhere((key, value) => key == 'Sunset' || key == 'Imsak' || key == 'Midnight' || key == 'Firstthird' || key == 'Lastthird');
+            deepSeatedMonth = curDate.month;
             break;
           case 'Coptic':
-            final response = await http.get(Uri.parse('$url${DateFormat('yyyy-MM-dd').format(curDate)}'));
-            if (response.statusCode == 200) {
-              final jsonData = jsonDecode(response.body);
-              day = jsonData['day'].toString();
-              month = jsonData['month'].toString();
-              year = '${jsonData['year']} ق';
-              monthString = jsonData['monthString'];
-              monthString = lang?[monthString] ?? monthString;
+            if(deepSeatedMonth != curDate.month){
+            
+              final response = await http.get(Uri.parse('https://api.coptic.io/api/calendar/month/${curDate.year}/${curDate.month}'));
+              if (response.statusCode == 200) {
+                final jsonData = jsonDecode(response.body);
+                days = jsonData['days'];
+              }
             }
+            curDayData = days[int.parse(calendars["Gregorian"]!.day ?? '1') - 1]['copticDate'];
+            day = curDayData['day'].toString();
+            month = curDayData['month'].toString();
+            year = '${curDayData['year']} ق';
+            monthString = curDayData['monthString'];
+            monthString = lang?[monthString] ?? monthString;
+            deepSeatedMonth = curDate.month;
             break;
           default:
             debugPrint('Unknown calendar type: $type');
@@ -73,5 +90,5 @@ class Calendar {
   static void setLang(Map<String,dynamic> langMap) {
     lang = langMap;
   }
-  Calendar({required this.type, required this.url});
+  Calendar({required this.type});
 }
